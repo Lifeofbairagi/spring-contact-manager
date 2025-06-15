@@ -1,0 +1,20 @@
+<div 
+  th:if="${session.message}"
+  th:object="${session.message}"
+  class="w-full mx-auto mb-4 flex items-center p-4 text-sm rounded-lg border dark:bg-gray-900"
+  th:classappend="' text-' + *{type} + '-800' + 
+                   ' bg-' + *{type} + '-100' + 
+                   ' border-' + *{type} + '-400' + 
+                   ' dark:text-' + *{type} + '-500' + 
+                   ' dark:border-' + *{type} + '-300'"
+  role="alert"
+  th:fragment="messagebox">
+
+  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+
+  <div>
+    <span th:text="*{content}"></span>
+  </div>
+</div>
