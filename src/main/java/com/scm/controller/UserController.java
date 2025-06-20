@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -16,14 +17,21 @@ public class UserController {
         return "user/dashboard";
     }
     
+    //user profile page 
+    @RequestMapping(value="/profile")
+    public String userProfile() {
+        return "user/profile";
+    }
+    
 
     //user add contact page
+
+
 
     //user delete contact page
     
     //user editcontact page
 
-    //user profile page 
 
     //user view contact page 
 
