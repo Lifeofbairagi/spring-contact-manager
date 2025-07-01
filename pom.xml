@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.scm</groupId>
-	<artifactId>scmx</artifactId>
+	<artifactId>scmx</artifactId> 
 	<version>0.0.1-SNAPSHOT</version>
 	<name>scmx</name>
 	<description>Spring Project (smart contact manager)</description>
@@ -52,11 +52,14 @@
        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-            <version>3.5.0</version>
        </dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
 
 		<dependency>
@@ -111,6 +114,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-	</build>
-
+	</build>		
 </project>
