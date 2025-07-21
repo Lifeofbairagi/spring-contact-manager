@@ -7,8 +7,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -38,21 +38,83 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
                 logger.info("OAuthAthenticationSuccessHandler");
 
+                //first identufy which provider is ther ethen take its attributes 
+                 var oauth2AuthenticationToken = (OAuth2AuthenticationToken) authentication;
+
+                 String authorisedClientRegistrationId = oauth2AuthenticationToken.getAuthorizedClientRegistrationId();
+
+                 logger.info(authorisedClientRegistrationId);
+
+                 var oauthUser = (DefaultOAuth2User)authentication.getPrincipal();
+
+                 oauthUser.getAttributes().forEach((key,value)->{
+                    logger.info(key + ":" + value);
+                 });
+
+                 User user = new User();
+                 user.setUserID(UUID.randomUUID().toString());
+                 user.setRoleList(List.of(AppConstants.ROLE_USER));
+                 user.setEmailVerified(true);
+                 user.setEnabled(true);
 
 
-                DefaultOAuth2User user = (DefaultOAuth2User)authentication.getPrincipal();
+                 if(authorisedClientRegistrationId.equalsIgnoreCase("google"))
+                 {
+                    //google code 
+                    user.setEmail(oauthUser.getAttribute("email").toString());
+                    user.setProfilePic(oauthUser.getAttribute("picture").toString());
+                    user.setName(oauthUser.getAttribute("name").toString());
+                    user.setProviderId(oauthUser.getName());
+                    user.setProvider(Providers.GOOGLE);
+                    user.setPassword("password");
+                    user.setAbout("this account is created using google");
 
-                // logger.info(user.getName());
+                 }
+                
+                 else if(authorisedClientRegistrationId.equalsIgnoreCase("github"))
+                 {
+                    //github code 
+                    String email = oauthUser.getAttribute("email") != null ? oauthUser.getAttribute("email").toString() : oauthUser.getAttribute("login").toString() + "@gmail.com";
+                    String picture = oauthUser.getAttribute("avatar_url").toString();
+                    String name = oauthUser.getAttribute("login").toString();
+                    String providerId = oauthUser.getName();
+
+                    user.setEmail(email);
+                    user.setProfilePic(picture);
+                    user.setName(name);
+                    user.setProviderId(providerId);
+                    user.setProvider(Providers.GITHUB);
+                    user.setPassword("password");
+                    user.setAbout("this account is createde using github");
+
+                 }
+                 
+                 else
+                 {
+                    logger.error("Unknown OAuth2 provider: {}", authorisedClientRegistrationId);
+                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown OAuth2 provider");
+                    return;
+                 }
+
                 
 
-                // user.getAttributes().forEach((key,value)->{
-                //     logger.info("{} => {}",key, value);
 
-                // });
 
-                // logger.info(user.getAuthorities().toString());
 
-                //before redirecting we save data to database
+
+                //DefaultOAuth2User user = (DefaultOAuth2User)authentication.getPrincipal();
+
+                /*logger.info(user.getName());
+                
+
+                 user.getAttributes().forEach((key,value)->{
+                    logger.info("{} => {}",key, value);
+
+                });
+
+                logger.info(user.getAuthorities().toString());
+
+                before redirecting we save data to database
                 String email=user.getAttribute("email").toString();
                 String name = user.getAttribute("name").toString();
                 String picture = user.getAttribute("picture").toString();
@@ -81,7 +143,14 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
                     logger.info("user saved successfully..."+ email);
                 }
                 
-                 
+                 */
+
+                 User user2 = userRepo.findByEmail(user.getEmail()).orElse(null);
+                if(user2==null)
+                {
+                    userRepo.save(user);
+                    logger.info("user saved successfully..."+ user.getEmail());
+                }
 
                 response.sendRedirect("/user/profile");
 
