@@ -79,10 +79,10 @@ public class OAuthAuthenticationSuccessHandler implements AuthenticationSuccessH
                     String name = oauthUser.getAttribute("login").toString();
                     String providerId = oauthUser.getName();
 
-                    user.setEmail("email");
-                    user.setProfilePic("picture");
-                    user.setName("name");
-                    user.setProviderId("providerId");
+                    user.setEmail(email);
+                    user.setProfilePic(picture);
+                    user.setName(name);
+                    user.setProviderId(providerId);
                     user.setProvider(Providers.GITHUB);
                     user.setPassword("password");
                     user.setAbout("this account is createde using github");

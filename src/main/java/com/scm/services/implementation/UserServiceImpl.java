@@ -96,6 +96,13 @@ private Logger logger= LoggerFactory.getLogger(this.getClass());
     @Override
     public List<User> getAllUsers() {
         return userRepo.findAll();
+    }
+
+    @Override
+    public User getUserByEmail(String email) 
+    {
+        return userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+       
     } 
 
 
