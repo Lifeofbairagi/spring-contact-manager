@@ -101,8 +101,7 @@ private Logger logger= LoggerFactory.getLogger(this.getClass());
     @Override
     public User getUserByEmail(String email) 
     {
-        return userRepo.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User not found"));
-       
+        return userRepo.findByEmail(email).orElse(null);
     } 
 
 
