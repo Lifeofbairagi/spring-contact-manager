@@ -13,15 +13,25 @@ th:fragment="parent(content,title,script)"
 </head> 
 <body class="dark:bg-gray-950 dark:text-white bg-white]">
     <!---Common Header-->
-    <div data-th-replace="navbar :: navbar">
+
+    <!-- if user is logged in this navbar shows -->
+    <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/user_navbar::user-navbar}"></div>
 
     </div>
+    
+
+    <!-- if user is not logged in this navbar shows -->
+    <div th:unless="${loggedInUser}">
+        <div data-th-replace="~{navbar :: navbar}"></div>
+    </div>
+
     <!---main content-->
     <div class="p-4">
         <section data-th-replace="${content}"></section>
     </div>
 
-    <!--- fommon footer-->
+    <!--- Common footer-->
     <!--<footer class="p-4">footer: this is my footer </footer>--> 
 
     <th:block data--th-replace="${script}"></th:block>

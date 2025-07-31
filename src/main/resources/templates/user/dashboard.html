@@ -1,11 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>THis is user dashboard </h1>
-</body>
-</html>
+<html 
+lang="en" th:replace="~{base :: parent(~{::#content},~{:: title},~{::script})}">
+
+    <head>
+        <title data-th-text="${loggedInUser.name}+ ' | Dashboard'">Dashboard</title>
+    </head>
+    <body>
+        <div id="content">
+            <div th:if="${loggedInUser}">
+        <div data-th-replace="~{user/sidebar::sidebar}"></div>
+    </div>
+        <div  class="pl-64 pt-16" style="height: 1000px">
+            <h1>welcome to User Dashboard </h1>
+            <p>
+                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Fuga, suscipit.
+            </p>
+        </div>
+        </div>
+        <script>
+            console.log("this is Dashboard")
+        </script>
+    </body>
+    </html>

@@ -34,7 +34,19 @@ public class UserController {
     //here in Requestmapping method=RequestMethod.GET was there but we can omit writing this it will assume Get method by default
     //but if you want Post method here you have to write it explicitly
     @RequestMapping(value="/dashboard")
-    public String userDashboard() {
+    public String userDashboard(Model model, Authentication authentication) 
+    {
+        String username = Helper.getEmailOfLoggedInUser(authentication);
+
+       
+
+        logger.info("User logged in : {}", username);
+
+         User user = userService.getUserByEmail(username);
+        System.out.println(user.getName());
+        System.out.println(user.getEmail());
+
+        model.addAttribute("loggedInUser", user);
         return "user/dashboard";
     }
     
